@@ -101,7 +101,7 @@ case class Set(setItems: Seq[SetItem])(l: PhysicalPlan, val plannerContext: Phys
 
     val needIndexes = ops.keySet
 
-    DataFrame(schema, () => records.map { record =>
+    DataFrame.cached(schema,  records.map { record =>
       record.zipWithIndex.map {
         case (e: LynxElement, index) if needIndexes.contains(index) => {
           val opsOfIt = ops(index)
@@ -128,6 +128,6 @@ case class Set(setItems: Seq[SetItem])(l: PhysicalPlan, val plannerContext: Phys
         }
         case other => other._1 // the column do not need change
       }
-    }.toIterator)
+    })
   }
 }
