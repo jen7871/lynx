@@ -64,9 +64,10 @@ trait WriteTask {
    *
    * @param relationshipIds The ids of relationships to modified
    * @param data            An array of key value pairs that represent the properties and values to be modified
+   * @param cleanExistProperties If it is true, properties will be overwritten; otherwise, properties will be modified
    * @return These relationships after modifying the properties
    */
-  def setRelationshipsProperties(relationshipIds: Iterator[LynxId], data: Array[(LynxPropertyKey, Any)]): Iterator[Option[LynxRelationship]]
+  def setRelationshipsProperties(relationshipIds: Iterator[LynxId], data: Array[(LynxPropertyKey, Any)], cleanExistProperties: Boolean = false): Iterator[Option[LynxRelationship]]
 
   /**
    * Set type of relationships.
