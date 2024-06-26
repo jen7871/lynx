@@ -4,7 +4,6 @@ import org.grapheco.lynx.types.traits.HasProperty
 import org.grapheco.lynx.types.{LTRelationship, LynxValue, RelationshipType, TypeMismatchException}
 
 trait LynxRelationship extends LynxValue with HasProperty with LynxElement {
-  val id: LynxId
   val startNodeId: LynxId
   val endNodeId: LynxId
 
