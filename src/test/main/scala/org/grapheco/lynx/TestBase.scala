@@ -117,8 +117,8 @@ class TestBase extends LazyLogging {
       override def setNodesLabels(nodeIds: Iterator[LynxId], labels: Array[LynxNodeLabel]): Iterator[Option[LynxNode]] =
         updateNodes(nodeIds, old => TestNode(old.id, (old.labels ++ labels.toSeq).distinct, old.props))
 
-      override def setRelationshipsProperties(relationshipIds: Iterator[LynxId], data: Array[(LynxPropertyKey, Any)]): Iterator[Option[LynxRelationship]] =
-        updateRelationships(relationshipIds, old => TestRelationship(old.id, old.startNodeId, old.endNodeId, old.relationType, data.toMap.mapValues(LynxValue.apply)))
+      override def setRelationshipsProperties(relationshipIds: Iterator[LynxId], data: Array[(LynxPropertyKey, Any)], cleanExistProperties: Boolean): Iterator[Option[LynxRelationship]] =
+        updateRelationships(relationshipIds, old => TestRelationship(old.id, old.startNodeId, old.endNodeId, old.relationType, (if (cleanExistProperties) Map.empty else old.props) ++ data.toMap.mapValues(LynxValue.apply)))
 
       override def setRelationshipsType(relationshipIds: Iterator[LynxId], typeName: LynxRelationshipType): Iterator[Option[LynxRelationship]] =
         updateRelationships(relationshipIds, old => TestRelationship(old.id, old.startNodeId, old.endNodeId, Some(typeName), old.props))
