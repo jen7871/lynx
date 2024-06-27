@@ -39,7 +39,7 @@ case class Set(setItems: Seq[SetItem])(l: PhysicalPlan, val plannerContext: Phys
     DataFrame.cached(schema,  records.map { record =>
       record.zipWithIndex.map {
         case (e: LynxElement, index) if needIndexes.contains(index) =>
-          ops(index).map(_.perform(e, record, columnNames, ctx.expressionContext)).last.asInstanceOf[LynxValue]
+          ops(index).map(_.perform(e, record, columnNames, ctx.expressionContext)).last
         case other => other._1 // the column do not need change
       }
     })
