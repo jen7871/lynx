@@ -3,7 +3,7 @@ package org.grapheco.lynx.types.structural
 import org.grapheco.lynx.types.traits.HasProperty
 import org.grapheco.lynx.types.{LTRelationship, LynxValue, RelationshipType, TypeMismatchException}
 
-trait LynxRelationship extends LynxValue with HasProperty with LynxElement {
+trait LynxRelationship extends LynxElement {
   val startNodeId: LynxId
   val endNodeId: LynxId
 
