@@ -102,13 +102,13 @@ trait GraphModel {
 
   def deleteNodes(ids: Seq[LynxId]): Unit = this.write.deleteNodes(ids)
 
-  def setNodesProperties(nodeIds: Iterator[LynxId], data: Array[(String, Any)], cleanExistProperties: Boolean = false): Iterator[Option[LynxNode]] =
+  def setNodesProperties(nodeIds: Iterator[LynxId], data: Array[(String, LynxValue)], cleanExistProperties: Boolean = false): Iterator[Option[LynxNode]] =
     this.write.setNodesProperties(nodeIds, data.map(kv => (LynxPropertyKey(kv._1), kv._2)), cleanExistProperties)
 
   def setNodesLabels(nodeIds: Iterator[LynxId], labels: Array[String]): Iterator[Option[LynxNode]] =
     this.write.setNodesLabels(nodeIds, labels.map(LynxNodeLabel))
 
-  def setRelationshipsProperties(relationshipIds: Iterator[LynxId], data: Array[(String, Any)]): Iterator[Option[LynxRelationship]] =
+  def setRelationshipsProperties(relationshipIds: Iterator[LynxId], data: Array[(String, LynxValue)]): Iterator[Option[LynxRelationship]] =
     this.write.setRelationshipsProperties(relationshipIds, data.map(kv => (LynxPropertyKey(kv._1), kv._2)))
 
   def setRelationshipsType(relationshipIds: Iterator[LynxId], theType: String): Iterator[Option[LynxRelationship]] =

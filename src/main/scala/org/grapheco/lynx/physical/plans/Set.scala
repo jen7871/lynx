@@ -59,7 +59,7 @@ case class Set(setItems: Seq[SetItem])(l: PhysicalPlan, val plannerContext: Phys
   }
 
   private abstract class SetPropertyOperator(val cleanExistProperties: Boolean) extends SetOperator{
-    protected def evalPropertyData(record: Seq[LynxValue], colNames: Seq[String], ec: ExpressionContext): Array[(LynxPropertyKey, Any)]
+    protected def evalPropertyData(record: Seq[LynxValue], colNames: Seq[String], ec: ExpressionContext): Array[(LynxPropertyKey, LynxValue)]
     override def perform(e: LynxElement, record: Seq[LynxValue], colNames: Seq[String], ec: ExpressionContext): LynxElement = {
       val setFunc = e match {
         case n: LynxNode => graphModel.write.setNodesProperties(_, _, cleanExistProperties)
@@ -79,8 +79,8 @@ case class Set(setItems: Seq[SetItem])(l: PhysicalPlan, val plannerContext: Phys
         case _ => throw ExecuteException("Unsupported type of logical property")
       }
     }
-    override protected def evalPropertyData(record: Seq[LynxValue], colNames: Seq[String], ec: ExpressionContext): Array[(LynxPropertyKey, Any)] = {
-      val newPropValue: Option[Any] = (colExpr, propValueExpr) match {
+    override protected def evalPropertyData(record: Seq[LynxValue], colNames: Seq[String], ec: ExpressionContext): Array[(LynxPropertyKey, LynxValue)] = {
+      val newPropValue: Option[LynxValue] = (colExpr, propValueExpr) match {
           case (Variable(_), _: Literal | _: Parameter) => Some(eval(propValueExpr)(ec))
           case (Variable(_) | _: CaseExpression, _) =>
             val newEC = ec.withVars(colNames.zip(record).toMap)
@@ -100,7 +100,7 @@ case class Set(setItems: Seq[SetItem])(l: PhysicalPlan, val plannerContext: Phys
 
   private class SetMultiplePropertiesOperator(val propValueExpr: Expression, override val cleanExistProperties: Boolean, colName: String) extends SetPropertyOperator(cleanExistProperties) {
     override protected def getColName(): String = colName
-    override protected def evalPropertyData(record: Seq[LynxValue], colNames: Seq[String], ec: ExpressionContext): Array[(LynxPropertyKey, Any)] = {
+    override protected def evalPropertyData(record: Seq[LynxValue], colNames: Seq[String], ec: ExpressionContext): Array[(LynxPropertyKey, LynxValue)] = {
       val nec = propValueExpr match {
         case _: Literal | _: Parameter => ec
         case _ => ec.withVars(colNames.zip(record).toMap)
