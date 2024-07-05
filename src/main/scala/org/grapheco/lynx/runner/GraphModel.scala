@@ -71,7 +71,7 @@ trait GraphModel {
   def nodes(): Iterator[LynxNode]
 
 
-  private val idPropKey = LynxPropertyKey("_lynx_sys_id")
+  def getIdPropKey = LynxPropertyKey("_lynx_sys_id")
 
   case class NodeId(value: Long) extends LynxId {
     override def toLynxInteger: LynxInteger = LynxInteger(value)
@@ -86,9 +86,9 @@ trait GraphModel {
    * @return An Iterator of all nodes after filter.
    */
   def nodes(nodeFilter: NodeFilter): Iterator[LynxNode] = {
-    nodeFilter.properties.get(idPropKey) match {
+    nodeFilter.properties.get(getIdPropKey) match {
       case None => nodes().filter(nodeFilter.matches(_))
-      case Some(LynxInteger(nodeId: Long)) => nodeAt(NodeId(nodeId)).iterator.filter(nodeFilter.matches(_, idPropKey))
+      case Some(LynxInteger(nodeId: Long)) => nodeAt(NodeId(nodeId)).iterator.filter(nodeFilter.matches(_, getIdPropKey))
     }
   }
 
